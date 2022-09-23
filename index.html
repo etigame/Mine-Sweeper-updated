@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mine Sweeper Game</title>
+    <link rel="stylesheet" href="mine-sweeper.css" />
+  </head>
+  <body onload="initGame()">
+    <h1>Mine Sweeper</h1>
+    <div class="level-btns">
+      <button onclick="chooseLevel(4, 2)">Beginner</button>
+      <button onclick="chooseLevel(8, 14)">Medium</button>
+      <button onclick="chooseLevel(12, 32)">Expert</button>
+    </div>
+    <div class="smile-n-details">
+      <div class="mines-counter">Mines:<br><span></span></div>
+      <button class="smiley" onclick="initGame()"></button>
+      <div class="lives-left"></div>
+    </div>
+    <table border="1" oncontextmenu="event.preventDefault()">
+      <tbody class="game-board"></tbody>
+    </table>
+    <div class="timer">Timer:<br><span></span></div>
+
+    <script src="mine-swipper.js"></script>
+  </body>
+</html>
