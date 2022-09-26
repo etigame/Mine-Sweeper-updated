@@ -3,6 +3,7 @@
 const MINE = '💣'
 const FLAG = '🚩'
 const HEART = '❤️'
+const HINT = '💡'
 const NORMAL_SMILEY = '\n\t\t<img src="img/normal-smiley.png">\n'
 const Lose_SMILEY = '\n\t\t<img src="img/lose-smiley.png">\n'
 const WIN_SMILEY = '\n\t\t<img src="img/win-smiley.png">\n'
@@ -16,19 +17,32 @@ var gLevel = {
 var gBoard
 var gtimerInterval
 var gMinesCounter
+var gIsHint = false
 
 var gGame = {
     isOn: false, 
     shownCount: 0, 
     markedCount: 0, 
-    livesLeft: 1
+    livesLeft: 1, 
+    hintsLeft: 3
 }
 
-function chooseLevel(size, mines) {
+function chooseLevel(size, mines, button) {
     gLevel = {
         SIZE: size, 
         MINES: mines
     }
+    
+    var elBtns = document.querySelectorAll('.level-btns button')
+    for (var i = 0; i < elBtns.length; i++) {
+        
+        if(elBtns[i].classList.contains('light')) {
+            elBtns[i].style.backgroundColor = 'rgb(110, 137, 243)'
+        } else {
+            elBtns[i].style.backgroundColor = 'black'
+        }
+    }
+    button.style.backgroundColor = '#FFB03A'
 
     initGame()
 }
@@ -48,11 +62,15 @@ function initGame(){
     gGame.livesLeft = 1
     if (gLevel.SIZE > 4) gGame.livesLeft = 3
     gMinesCounter = gLevel.MINES
+    gGame.hintsLeft = 3
+
     
     document.querySelector('.timer span').innerText = ''
     document.querySelector('.smiley').innerHTML = NORMAL_SMILEY
-    document.querySelector('.lives-left').innerText = `Lives:\n ${displayHearts()}`  
-    document.querySelector('.mines-counter span').innerText = `${gMinesCounter}`
+    document.querySelector('.lives-left').innerHTML = `Lives:<br><span>${displayHearts()}</span>`  
+    document.querySelector('.mines-counter').innerHTML = `Mines:<br><span>${gMinesCounter}</span>` 
+    document.querySelector('.hints').innerHTML = `${displayHints()}`  
+
 }
 
 
@@ -163,14 +181,18 @@ function cellClicked(elCell, i, j, event) {
     if (!gGame.isOn) return
     
     if (event.button === 0) {  
-        if (!cell.isShown && !cell.isMarked) {
+        if (!cell.isShown && !cell.isMarked && !gIsHint) {
             cell.isShown = true
             gGame.shownCount++
+            if (!gIsHint) cell.isShownBefore = true
         }
 
         if (!cell.minesAroundCount && !cell.isMine) expandShown(gBoard, cell, {i: i, j: j})
 
-        if (cell.isMine && !cell.isMarked) {
+        if (gIsHint) hintShow(gBoard, cell, {i: i, j: j})
+
+        if (cell.isMine && !cell.isMarked && !gIsHint) {
+            
             cell.isShown = true
             gGame.livesLeft--
             document.querySelector('.lives-left').innerText = `Lives:\n ${displayHearts()}`  
@@ -263,6 +285,7 @@ function expandShown(board, cell, location) {
             if (!board[i][j].isShown) {  
             board[i][j].isShown = true
             gGame.shownCount++
+            if (!gIsHint) board[i][j].isShownBefore = true
             }
         }
     }
@@ -318,3 +341,81 @@ function showTimer() {
       timer.innerHTML = `\n ${secs}:${ms}`
     }, 100)
   }
+
+  function toggleMode() {
+    var levelBtns = document.querySelectorAll('.level-btns button')
+   
+    if (document.querySelector('body').classList.contains('dark')) {
+        document.querySelector('body').classList.remove('dark')
+        document.querySelector('body').classList.add('light')
+        document.querySelector('.display-mode').innerText = '🌙'
+        for (var i = 0 ; i < levelBtns.length; i++) {
+            levelBtns[i].style.backgroundColor = 'rgb(110, 137, 243)'
+            levelBtns[i].classList.remove('dark')
+            levelBtns[i].classList.add('light')
+        }
+    } else {
+        document.querySelector('body').classList.remove('light')
+        document.querySelector('body').classList.add('dark')
+        document.querySelector('.display-mode').innerText = '🔆'
+        for (var i = 0 ; i < levelBtns.length; i++) {
+            levelBtns[i].style.backgroundColor = 'black'
+            levelBtns[i].classList.remove('light')
+            levelBtns[i].classList.add('dark')
+        }
+    }
+  }
+
+  function getHint() {
+    gIsHint = true
+  }
+
+  function displayHints() {
+    var hints = ''
+
+    for (var i = 0; i < gGame.hintsLeft; i++) {
+        hints += HINT 
+    }
+
+    return hints
+}
+
+function hintShow(board, cell, location) {
+    
+    for (var i = location.i - 1; i <= location.i + 1; i++) {
+        if (i < 0 || i >= board.length) continue
+
+        for (var j = location.j - 1; j <= location.j + 1; j++) {
+            if (j < 0 || j >= board[0].length) continue
+            
+            if (!board[i][j].isShown) {  
+            board[i][j].isShown = true
+            }
+        }
+    }
+    renderBoard()
+
+    setTimeout(() => {
+        hideHintShow(board, cell, location)
+        gIsHint = false
+        gGame.hintsLeft--
+        document.querySelector('.hints').innerText = `${displayHints()}`
+    }, 1000);
+}
+
+function hideHintShow(board, cell, location) {
+    
+    for (var i = location.i - 1; i <= location.i + 1; i++) {
+        if (i < 0 || i >= board.length) continue
+
+        for (var j = location.j - 1; j <= location.j + 1; j++) {
+            if (j < 0 || j >= board[0].length) continue
+            
+            if (board[i][j].isShown && !board[i][j].isShownBefore) {  
+            board[i][j].isShown = false
+            }
+        }
+    }
+    renderBoard()
+
+}

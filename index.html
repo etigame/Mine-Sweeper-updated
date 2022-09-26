@@ -7,23 +7,26 @@
     <title>Mine Sweeper Game</title>
     <link rel="stylesheet" href="mine-sweeper.css" />
   </head>
-  <body onload="initGame()">
+  <body onload="initGame()" class="dark">
     <h1>Mine Sweeper</h1>
+    <button onclick="toggleMode()" class="display-mode">🔆</button>
     <div class="level-btns">
-      <button onclick="chooseLevel(4, 2)">Beginner</button>
-      <button onclick="chooseLevel(8, 14)">Medium</button>
-      <button onclick="chooseLevel(12, 32)">Expert</button>
+      <button onclick="chooseLevel(4, 2, this)">Beginner</button>
+      <button onclick="chooseLevel(8, 14, this)">Medium</button>
+      <button onclick="chooseLevel(12, 32, this)">Expert</button>
     </div>
     <div class="smile-n-details">
-      <div class="mines-counter">Mines:<br><span></span></div>
+      <div class="mines-counter"></div>
       <button class="smiley" onclick="initGame()"></button>
       <div class="lives-left"></div>
     </div>
-    <table border="1" oncontextmenu="event.preventDefault()">
+    <div class="container">
+    <table border="0" oncontextmenu="event.preventDefault()">
       <tbody class="game-board"></tbody>
     </table>
-    <div class="timer">Timer:<br><span></span></div>
-
+    <button onclick="getHint()" class="hints">💡💡💡</button>
+  </div>
+    <div class="timer">⏳<span></span></div>
     <script src="mine-swipper.js"></script>
   </body>
 </html>

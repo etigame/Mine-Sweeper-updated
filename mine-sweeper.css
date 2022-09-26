@@ -3,25 +3,34 @@
   padding: 0px;
 }
 
-body {
-  background: linear-gradient(to right bottom, #FD841F, #CD104D);
+body.dark {
+  background: linear-gradient(black, rgb(0, 0, 74));
   background-attachment: fixed;
+  text-align: center;
+}
 
+body.light {
+  background: linear-gradient(rgb(110, 137, 243), #02b2d1);
+  background-attachment: fixed;
+  text-align: center;
 }
 
 h1 {
+  display: inline-block;
   margin-top: 20px;
-  margin-bottom: 10px;
-  text-align: center;
-  font-family: fantasy;
-  letter-spacing: 2px;
-  color: white;
-  font-weight: 100;
+  margin-bottom: 20px;
+  font-family: cursive;  
+  color: #FFB03A;
+  font-weight: 900;
 }
 
 table {
-  border: 2px solid rgba(255, 255, 255, 0.654);
+  display: inline-block;
   margin: auto;
+  cursor: pointer;
+}
+
+.container {
   margin-bottom: 20px;
 }
 
@@ -29,20 +38,29 @@ table {
     height: 50px;
     width: 50px;
     text-align: center;
+    background: rgba(255, 255, 255, 0.331);    
+    font-family: cursive;  
+
+
 }
 
 .cell:hover {
-  background-color: #FD841F;
+  background-color: #FFB03A;
 }
 
 .cell.shown {
-  background-color: #FD841F;
+  background-color: #FFB03A;
+}
+
+.cell.shown.mine {
+  background-color: #E21143;
 }
 
 .cell.marked {
-  background-color: #FD841F;
+  background-color: #FFB03A;
 }
 
+/* #E21143, #FFB03A */
 
 .smiley img {
   height: 50px;
@@ -51,62 +69,107 @@ table {
 
 .level-btns {
   text-align: center;
+  margin-bottom: 20px;
 }
 
 .level-btns button {
-  font-family: fantasy;
+  font-family: cursive;  
   letter-spacing: 2px;
   font-size: 20px;
   padding: 5px 10px;  
   margin: 10px;
-  background-color: #9c2c77b3;
-  border: 0px;
+  background-color: black;
+  border: 3px solid #E21143;
   cursor: pointer; 
   color: white;  
   font-weight: 100;
-  border-radius: 3px;
+  border-radius: 5px;
+}
+
+
+.level-btns button.light {
+  background-color: rgb(110, 137, 243);
 }
 
 .level-btns button:hover {
-  background-color: #FD841F;
+  background-color: #FFB03A;
 }
+
 
 .smile-n-details {
   text-align: center;
   margin-bottom: 10px;
+  font-family: cursive;  
 }
 
 .mines-counter {
   display: inline-block;
-  background-color: rgba(255, 255, 255, 0.413);
   height: 50px;
   width: 100px;
   border-radius: 3px;
   padding-top: 5px;
+  color: #FFB03A;
+  font-size: 20px;
+
+}
+
+.mines-counter span {
+  color: white;
 }
 
 .smiley {
   display: inline-block;
   margin: 0px 30px;
   cursor: pointer; 
+  background: transparent;
+  border: 0;
 }
 
 .lives-left {
   display: inline-block;
-  background-color: rgba(255, 255, 255, 0.413);
   height: 50px;
   width: 100px;
   border-radius: 3px;
   padding-top: 5px;
+  color: #FFB03A;
+  font-size: 20px;
 }
 
 .timer {
-  display: inline-block;
-  background-color: #fd831fae;
+  margin: auto;
   padding: 10px;
-  margin: 0px 640px;
   height: 30px;
   width: 80px;
   text-align: center;
   margin-bottom: 20px;
+  color: #FFB03A;
+  font-family: cursive;  
+  font-size: 30px;
+}
+
+.timer span {
+  color: white;
+  font-size: 20px;
+}
+
+.display-mode {
+  position: absolute;
+  right: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 30px;
+  background: transparent;
+  cursor: pointer;
+  display: inline-block;
+  border: 0;
+}
+
+.hints {
+  display: inline-block;
+  position: absolute;
+  margin: 50px 40px;
+  font-size: 30px;
+  background: transparent;
+  cursor: pointer;
+  border: 0; 
 }
