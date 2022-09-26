@@ -11,7 +11,9 @@ const WIN_SMILEY = '\n\t\t<img src="img/win-smiley.png">\n'
 
 var gLevel = {
    SIZE: 4, 
-   MINES: 2 
+   MINES: 2,
+   currScore: {secs: 0, ms: 0},
+   bestScore: {secs: Infinity, ms: Infinity}
 }
 
 var gBoard
@@ -70,7 +72,7 @@ function initGame(){
     document.querySelector('.lives-left').innerHTML = `Lives:<br><span>${displayHearts()}</span>`  
     document.querySelector('.mines-counter').innerHTML = `Mines:<br><span>${gMinesCounter}</span>` 
     document.querySelector('.hints').innerHTML = `${displayHints()}`  
-
+    
 }
 
 
@@ -221,6 +223,14 @@ function checkWin() {
 
 function victory() {
     document.querySelector('.smiley').innerHTML = WIN_SMILEY
+    
+    if (gLevel.currScore.secs < gLevel.bestScore.secs
+        // || gLevel.currScore.secs === gLevel.bestScore.secs && gLevel.currScore.ms < gLevel.bestScore.ms) { 
+    ){gLevel.bestScore = gLevel.currScore
+        document.querySelector('.best-score span').innerHTML = 
+        `${gLevel.bestScore.secs}:${gLevel.bestScore.ms}`
+        }
+
     resetGameVars()
 }
 
@@ -282,7 +292,7 @@ function expandShown(board, cell, location) {
         for (var j = location.j - 1; j <= location.j + 1; j++) {
             if (j < 0 || j >= board[0].length) continue
             
-            if (!board[i][j].isShown) {  
+            if (!board[i][j].isShown && !gIsHint) {  
             board[i][j].isShown = true
             gGame.shownCount++
             if (!gIsHint) board[i][j].isShownBefore = true
@@ -328,7 +338,7 @@ function getRandomIntInclusive(min, max) {
 function showTimer() {
     var timer = document.querySelector('.timer span')
     var timeStart = Date.now()
-  
+    
     gtimerInterval = setInterval(() => {
       var currTime = Date.now()
   
@@ -337,8 +347,10 @@ function showTimer() {
       ms = '000' + ms
       // 00034 // 0001
       ms = ms.substring(ms.length - 3, ms.length)
-  
+      
       timer.innerHTML = `\n ${secs}:${ms}`
+      
+      gLevel.currScore = {secs: secs, ms: +ms}
     }, 100)
   }
 
@@ -396,10 +408,10 @@ function hintShow(board, cell, location) {
     renderBoard()
 
     setTimeout(() => {
-        hideHintShow(board, cell, location)
         gIsHint = false
         gGame.hintsLeft--
         document.querySelector('.hints').innerText = `${displayHints()}`
+        hideHintShow(board, cell, location)
     }, 1000);
 }
 
