@@ -23,14 +23,66 @@ h1 {
   font-weight: 900;
 }
 
+
+.first-line {
+  display: flex;
+  justify-content: space-between;
+  }
+  
+  .display-mode {
+    margin-right: 40px;
+    font-size: 30px;
+    background: transparent;
+    cursor: pointer;
+    display: inline-block;
+    border: 0;
+  }
+  
+  .best-score {
+    background-color: #E21143;
+    color: white;
+    display: inline-block;
+    font-family: cursive;  
+    font-size: 20px;
+    font-weight: 200;
+    padding: 4px 7px 4px 50px;
+    border-radius: 0px 5px 5px 0px;
+  }
+
+.container {
+  display: flex;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.safe-clicks {
+  display: inline-block;
+  margin: 50px 10px;
+  font-size: 30px;
+  background: transparent;
+  cursor: pointer;
+  border: 0; 
+  height: 100px;
+  width: 150px;
+}
+
+
 table {
   display: inline-block;
-  margin: auto;
+  margin: 0px 10px;
   cursor: pointer;
 }
 
-.container {
-  margin-bottom: 20px;
+.hints {
+  display: inline-block;
+  margin: 50px 10px;
+  font-size: 30px;
+  background: transparent;
+  cursor: pointer;
+  border: 0; 
+  height: 100px;
+  width: 150px;
+
 }
 
 .cell {
@@ -39,8 +91,17 @@ table {
     text-align: center;
     background: rgba(255, 255, 255, 0.331);    
     font-family: cursive;  
+    
+  }
+  
+  .cell.safe {
+    background: linear-gradient(to right bottom, #E21143, #FFB03A);
+    animation: safe 3s infinite;
+}
 
-
+@keyframes safe {
+  from {background: rgba(255, 255, 255, 0.331);}
+  to {background: linear-gradient(to right bottom, #E21143, #FFB03A)}
 }
 
 .cell:hover {
@@ -59,7 +120,6 @@ table {
   background-color: #FFB03A;
 }
 
-/* #E21143, #FFB03A */
 
 .smiley img {
   height: 50px;
@@ -151,37 +211,4 @@ table {
   font-size: 20px;
 }
 
-.first-line {
-display: flex;
-justify-content: space-between;
-}
 
-.display-mode {
-  margin-right: 40px;
-  font-size: 30px;
-  background: transparent;
-  cursor: pointer;
-  display: inline-block;
-  border: 0;
-}
-
-.hints {
-  display: inline-block;
-  position: absolute;
-  margin: 50px 40px;
-  font-size: 30px;
-  background: transparent;
-  cursor: pointer;
-  border: 0; 
-}
-
-.best-score {
-  background-color: #E21143;
-  color: white;
-  display: inline-block;
-  font-family: cursive;  
-  font-size: 20px;
-  font-weight: 200;
-  padding: 4px 7px 4px 50px;
-  border-radius: 0px 5px 5px 0px;
-}

@@ -4,6 +4,7 @@ const MINE = '💣'
 const FLAG = '🚩'
 const HEART = '❤️'
 const HINT = '💡'
+const SAFE_CLICK = '🦺'
 const NORMAL_SMILEY = '\n\t\t<img src="img/normal-smiley.png">\n'
 const Lose_SMILEY = '\n\t\t<img src="img/lose-smiley.png">\n'
 const WIN_SMILEY = '\n\t\t<img src="img/win-smiley.png">\n'
@@ -20,13 +21,15 @@ var gBoard
 var gtimerInterval
 var gMinesCounter
 var gIsHint = false
+var gIsSafeClick = false
 
 var gGame = {
     isOn: false, 
     shownCount: 0, 
     markedCount: 0, 
     livesLeft: 1, 
-    hintsLeft: 3
+    hintsLeft: 3,
+    safeClicksLeft: 3
 }
 
 function chooseLevel(size, mines, button) {
@@ -35,6 +38,10 @@ function chooseLevel(size, mines, button) {
         MINES: mines
     }
     
+    gLevel.currScore = {secs: 0, ms: 0}
+    gLevel.bestScore = {secs: Infinity, ms: Infinity}
+    document.querySelector('.best-score span').innerHTML = ''
+
     var elBtns = document.querySelectorAll('.level-btns button')
     for (var i = 0; i < elBtns.length; i++) {
         
@@ -65,6 +72,7 @@ function initGame(){
     if (gLevel.SIZE > 4) gGame.livesLeft = 3
     gMinesCounter = gLevel.MINES
     gGame.hintsLeft = 3
+    gGame.safeClicksLeft = 3
 
     
     document.querySelector('.timer span').innerText = ''
@@ -72,6 +80,7 @@ function initGame(){
     document.querySelector('.lives-left').innerHTML = `Lives:<br><span>${displayHearts()}</span>`  
     document.querySelector('.mines-counter').innerHTML = `Mines:<br><span>${gMinesCounter}</span>` 
     document.querySelector('.hints').innerHTML = `${displayHints()}`  
+    document.querySelector('.safe-clicks').innerHTML = `${displaySafeClicks()}`
     
 }
 
@@ -119,7 +128,8 @@ function renderBoard() {
             
             if (cell.isShown) className += 'shown '
             if (cell.isMine) className += 'mine '
-            if (cell.isMarked) className += 'marked'
+            if (cell.isMarked) className += 'marked '
+            if (cell.isSafe) className += 'safe '
 
             var cellElement = ''
             if (!cell.isShown && cell.isMarked) cellElement += FLAG
@@ -224,11 +234,12 @@ function checkWin() {
 function victory() {
     document.querySelector('.smiley').innerHTML = WIN_SMILEY
     
-    if (gLevel.currScore.secs < gLevel.bestScore.secs
-        // || gLevel.currScore.secs === gLevel.bestScore.secs && gLevel.currScore.ms < gLevel.bestScore.ms) { 
-    ){gLevel.bestScore = gLevel.currScore
-        document.querySelector('.best-score span').innerHTML = 
-        `${gLevel.bestScore.secs}:${gLevel.bestScore.ms}`
+    if (gLevel.currScore.secs < gLevel.bestScore.secs ||
+        gLevel.currScore.secs === gLevel.bestScore.secs && gLevel.currScore.ms < gLevel.bestScore.ms) { 
+        gLevel.bestScore.secs = gLevel.currScore.secs
+        gLevel.bestScore.ms = gLevel.currScore.ms
+
+        document.querySelector('.best-score span').innerHTML = `${gLevel.bestScore.secs}:${gLevel.bestScore.ms}`
         }
 
     resetGameVars()
@@ -430,4 +441,35 @@ function hideHintShow(board, cell, location) {
     }
     renderBoard()
 
+}
+
+function getSafeClick() {
+    var safeCells = []
+
+    for (var i = 0; i < gLevel.SIZE; i++) {
+        for (var j = 0; j < gLevel.SIZE; j++) {
+            if (!gBoard[i][j].isMine && !gBoard[i][j].isShown) safeCells.push({i, j})
+        }
+    }
+    var safeCell = safeCells[getRandomIntInclusive(0, safeCells.length - 1)]
+    gBoard[safeCell.i][safeCell.j].isSafe = true
+
+    renderBoard()
+
+    setTimeout(() => {
+        gBoard[safeCell.i][safeCell.j].isSafe = false
+        gGame.safeClicksLeft--
+        document.querySelector('.safe-clicks').innerHTML = `${displaySafeClicks()}`
+        renderBoard()
+    }, 3000);
+}
+
+function displaySafeClicks() {
+    var safeClicks = ''
+
+    for (var i = 0; i < gGame.safeClicksLeft; i++) {
+        safeClicks += SAFE_CLICK 
+    }
+
+    return safeClicks
 }

@@ -10,25 +10,26 @@
   <body onload="initGame()" class="dark">
     <h1>Mine Sweeper</h1>
     <div class="first-line">
-    <h2 class="best-score">Best Score: <span></span></h2>
-    <button onclick="toggleMode()" class="display-mode">🔆</button>
-  </div>
+      <h2 class="best-score">Best Score: <span></span></h2>
+      <button onclick="toggleMode()" class="display-mode">🔆</button>
+      </div>
     <div class="level-btns">
       <button onclick="chooseLevel(4, 2, this)">Beginner</button>
       <button onclick="chooseLevel(8, 14, this)">Medium</button>
       <button onclick="chooseLevel(12, 32, this)">Expert</button>
-    </div>
+      </div>
     <div class="smile-n-details">
       <div class="mines-counter"></div>
       <button class="smiley" onclick="initGame()"></button>
       <div class="lives-left"></div>
-    </div>
+      </div>
     <div class="container">
-    <table border="0" oncontextmenu="event.preventDefault()">
-      <tbody class="game-board"></tbody>
-    </table>
-    <button onclick="getHint()" class="hints">💡💡💡</button>
-  </div>
+      <button title="Get a hint" onclick="getHint()" class="hints">💡💡💡</button>
+      <table border="0" oncontextmenu="event.preventDefault()">
+        <tbody class="game-board"></tbody>
+        </table>
+      <button title="Safe-Click" onclick="getSafeClick()" class="safe-clicks">🦺🦺🦺</button>
+      </div>
     <div class="timer">⏳<span></span></div>
     <script src="mine-swipper.js"></script>
   </body>
