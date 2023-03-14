@@ -1,6 +1,7 @@
 # Mine-Sweeper
 
 Try to find all the mines!
+
 The goal is to clear the board containing hidden "mines" (bombs) without detonating any of them.
 
 [Link to Mine-Sweeper](https://etigame.github.io/Mine-Sweeper-updated/)
